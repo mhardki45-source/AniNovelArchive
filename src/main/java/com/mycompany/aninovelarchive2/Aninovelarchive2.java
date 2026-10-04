@@ -43,7 +43,7 @@ public class Aninovelarchive2 {
         boolean isRunning = true;
 
         System.out.println("=================================================");
-        System.out.println("   Selamat Datang di AniNovelArchive  ");
+        System.out.println("   Selamat Datang di AniNovelArchive.  ");
         System.out.println("=================================================");
 
         while (isRunning) {
