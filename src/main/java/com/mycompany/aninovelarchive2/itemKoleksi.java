@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.aninovelarchive2;
 
-public class itemKoleksi {
+public abstract class itemKoleksi {
     private String judul;
     private String genre;
     private int tahunRilis;
@@ -47,4 +43,6 @@ public class itemKoleksi {
     public void tampilkanInfo() {
         System.out.printf("Judul: %-25s | Genre: %-12s | Tahun: %d", judul, genre, tahunRilis);
     }
+
+    public abstract int hitungEstimasiDurasi();
 }

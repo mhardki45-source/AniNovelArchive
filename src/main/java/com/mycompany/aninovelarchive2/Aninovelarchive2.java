@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.aninovelarchive2;
 
 import java.util.Scanner;
@@ -36,11 +32,23 @@ public class Aninovelarchive2 {
         }
     }
 
+    public static void tampilkanDaftarRingkas(itemKoleksi[] daftar, int jumlah) {
+        System.out.println();
+        for (int i = 0; i < jumlah; i++) {
+            System.out.println((i + 1) + ". " + daftar[i].getJudul());
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        itemKoleksi[] daftarKoleksi = new itemKoleksi[15]; // Array penyimpanan
+        itemKoleksi[] daftarKoleksi = new itemKoleksi[15];
         int jumlahKoleksi = 0;
         boolean isRunning = true;
+
+        daftarKoleksi[jumlahKoleksi++] = new Anime("Frieren", "Fantasy", 2023, 28, "Madhouse");
+        daftarKoleksi[jumlahKoleksi++] = new Anime("Steins;Gate", "Sci-Fi", 2011, 24, "White Fox");
+        daftarKoleksi[jumlahKoleksi++] = new LightNovel("Re:Zero", "Isekai", 2014, 35, "Tappei Nagatsuki");
+        daftarKoleksi[jumlahKoleksi++] = new LightNovel("Sword Art Online", "Fantasy", 2009, 27, "Reki Kawahara");
 
         System.out.println("=================================================");
         System.out.println("   Selamat Datang di AniNovelArchive.  ");
@@ -51,8 +59,11 @@ public class Aninovelarchive2 {
             System.out.println("1. Tambah Judul Baru (Anime / Light Novel)");
             System.out.println("2. Tampilkan Seluruh Koleksi");
             System.out.println("3. Cari Koleksi (Method Overloading)");
-            System.out.println("4. Keluar");
-            System.out.print("Pilih menu (1-4): ");
+            System.out.println("4. Beri Rating (Interface DapatDinilai)");
+            System.out.println("5. Pinjam Koleksi (Interface DapatDipinjam)");
+            System.out.println("6. Demo Semua Aksi (Abstract Method & Interface)");
+            System.out.println("7. Keluar");
+            System.out.print("Pilih menu (1-7): ");
 
             int pilihan = scanner.nextInt();
             scanner.nextLine();
@@ -112,7 +123,8 @@ public class Aninovelarchive2 {
                     } else {
                         for (int i = 0; i < jumlahKoleksi; i++) {
                             System.out.print((i + 1) + ". ");
-                            daftarKoleksi[i].tampilkanInfo(); // Polymorphism & Overriding
+                            daftarKoleksi[i].tampilkanInfo();
+                            daftarKoleksi[i].hitungEstimasiDurasi();
                         }
                     }
                     break;
@@ -144,12 +156,82 @@ public class Aninovelarchive2 {
                     break;
 
                 case 4:
+                    if (jumlahKoleksi == 0) {
+                        System.out.println("Koleksi masih kosong, tambahkan data terlebih dahulu.");
+                        break;
+                    }
+                    tampilkanDaftarRingkas(daftarKoleksi, jumlahKoleksi);
+                    System.out.print("Pilih nomor koleksi: ");
+                    int noRating = scanner.nextInt();
+                    scanner.nextLine();
+                    if (noRating < 1 || noRating > jumlahKoleksi) {
+                        System.out.println("Nomor tidak valid.");
+                        break;
+                    }
+                    System.out.print("Masukkan rating (1-10): ");
+                    double nilai = scanner.nextDouble();
+                    scanner.nextLine();
+                    if (nilai < 1 || nilai > 10) {
+                        System.out.println("Rating harus antara 1 sampai 10.");
+                        break;
+                    }
+                    itemKoleksi dipilihRating = daftarKoleksi[noRating - 1];
+                    if (dipilihRating instanceof DapatDinilai) {
+                        ((DapatDinilai) dipilihRating).beriRating(nilai);
+                    } else {
+                        System.out.println("   -> '" + dipilihRating.getJudul() + "' tidak dapat dinilai.");
+                    }
+                    break;
+
+                case 5:
+                    if (jumlahKoleksi == 0) {
+                        System.out.println("Koleksi masih kosong, tambahkan data terlebih dahulu.");
+                        break;
+                    }
+                    tampilkanDaftarRingkas(daftarKoleksi, jumlahKoleksi);
+                    System.out.print("Pilih nomor koleksi: ");
+                    int noPinjam = scanner.nextInt();
+                    scanner.nextLine();
+                    if (noPinjam < 1 || noPinjam > jumlahKoleksi) {
+                        System.out.println("Nomor tidak valid.");
+                        break;
+                    }
+                    System.out.print("Masukkan nama peminjam: ");
+                    String namaPeminjam = scanner.nextLine();
+                    itemKoleksi dipilihPinjam = daftarKoleksi[noPinjam - 1];
+                    if (dipilihPinjam instanceof DapatDipinjam) {
+                        ((DapatDipinjam) dipilihPinjam).prosesPinjam(namaPeminjam);
+                    } else {
+                        System.out.println("   -> '" + dipilihPinjam.getJudul() + "' tidak dapat dipinjam.");
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("\n=== DEMO ABSTRACT METHOD & INTERFACE ===");
+                    for (int i = 0; i < jumlahKoleksi; i++) {
+                        itemKoleksi item = daftarKoleksi[i];
+                        System.out.println("\n" + (i + 1) + ". " + item.getJudul());
+                        item.hitungEstimasiDurasi();
+                        if (item instanceof DapatDinilai) {
+                            ((DapatDinilai) item).beriRating(8.5);
+                        } else {
+                            System.out.println("   -> Tidak mengimplementasikan DapatDinilai.");
+                        }
+                        if (item instanceof DapatDipinjam) {
+                            ((DapatDipinjam) item).prosesPinjam("Kaizen");
+                        } else {
+                            System.out.println("   -> Tidak mengimplementasikan DapatDipinjam.");
+                        }
+                    }
+                    break;
+
+                case 7:
                     isRunning = false;
-                    System.out.println("\nTerima kasih telah menggunakan Smart Otaku Collection App!");
+                    System.out.println("\nTerima kasih telah menggunakan AniNovelArchive!");
                     break;
 
                 default:
-                    System.out.println("Pilihan menu tidak valid. Silakan pilih 1-4.");
+                    System.out.println("Pilihan menu tidak valid. Silakan pilih 1-7.");
             }
         }
         scanner.close();
