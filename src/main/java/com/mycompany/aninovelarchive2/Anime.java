@@ -5,8 +5,15 @@ public class Anime extends itemKoleksi implements DapatDinilai {
     private String studio;
     private double rating = 0;
 
-    public Anime(String judul, String genre, int tahunRilis, int jumlahEpisode, String studio) {
+    public Anime(String judul, String genre, int tahunRilis, int jumlahEpisode, String studio) throws Exception {
         super(judul, genre, tahunRilis);
+        if (jumlahEpisode <= 0 || studio == null || studio.trim().isEmpty()) {
+            totalKoleksi--; // objek batal dibuat, koreksi penghitung
+            if (jumlahEpisode <= 0) {
+                throw new Exception("Jumlah episode harus lebih dari 0!");
+            }
+            throw new Exception("Nama studio tidak boleh kosong!");
+        }
         this.jumlahEpisode = jumlahEpisode;
         this.studio = studio;
     }

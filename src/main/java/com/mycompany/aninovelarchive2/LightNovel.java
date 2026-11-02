@@ -6,8 +6,15 @@ public class LightNovel extends itemKoleksi implements DapatDinilai, DapatDipinj
     private double rating = 0;
     private String peminjam = null;
 
-    public LightNovel(String judul, String genre, int tahunRilis, int jumlahVolume, String penulis) {
+    public LightNovel(String judul, String genre, int tahunRilis, int jumlahVolume, String penulis) throws Exception {
         super(judul, genre, tahunRilis);
+        if (jumlahVolume <= 0 || penulis == null || penulis.trim().isEmpty()) {
+            totalKoleksi--; // objek batal dibuat, koreksi penghitung
+            if (jumlahVolume <= 0) {
+                throw new Exception("Jumlah volume harus lebih dari 0!");
+            }
+            throw new Exception("Nama penulis tidak boleh kosong!");
+        }
         this.jumlahVolume = jumlahVolume;
         this.penulis = penulis;
     }

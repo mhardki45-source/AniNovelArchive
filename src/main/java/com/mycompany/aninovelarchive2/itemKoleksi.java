@@ -7,7 +7,16 @@ public abstract class itemKoleksi {
 
     public static int totalKoleksi = 0;
 
-    public itemKoleksi(String judul, String genre, int tahunRilis) {
+    public itemKoleksi(String judul, String genre, int tahunRilis) throws Exception {
+        if (judul == null || judul.trim().isEmpty()) {
+            throw new Exception("Judul tidak boleh kosong!");
+        }
+        if (genre == null || genre.trim().isEmpty()) {
+            throw new Exception("Genre tidak boleh kosong!");
+        }
+        if (tahunRilis <= 1900) {
+            throw new Exception("Tahun rilis tidak valid (harus lebih dari 1900)!");
+        }
         this.judul = judul;
         this.genre = genre;
         this.tahunRilis = tahunRilis;
